@@ -4,13 +4,12 @@ var bcrypt = require('bcrypt-nodejs');
 var jwt = require('jsonwebtoken');
 var secret = "IlOvEmYiNdIa";
 var window = require("js-base64").Base64;
-var driver = neo4j.driver('bolt://52.86.4.26:37194', neo4j.auth.basic('neo4j', 'shipping-can-mittens'));
+var driver = neo4j.driver('bolt://18.206.206.135:32809', neo4j.auth.basic('neo4j', 'masters-percents-decrease'));
 var session = driver.session();
 
 module.exports = {
   demofun: function (req, res) {
     res.send("Connected to family tree server");
-
   },
   checkusername: function (req, res) {
 
@@ -50,5 +49,13 @@ module.exports = {
           res.json({error : { success: false, message: 'Invalid Username/Password' }});
         }
       });
+  },
+  getdata:function(req,res){
+    session
+      .run('MATCH (n) RETURN n LIMIT 25')
+      .then(function (result) {
+        console.log(result);
+        res.send(result);       
+      });  
   }
 }

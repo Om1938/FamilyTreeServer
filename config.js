@@ -25,10 +25,10 @@ nconf.env(['PORT', 'NODE_ENV'])
   })
   .defaults({
     'USERNAME': "neo4j",
-    'PASSWORD' : "measure-escapes-papers",
+    'PASSWORD' : "masters-percents-decrease",
     'neo4j': 'local',
-    'neo4j-local': 'bolt://54.84.177.94:34978',
-    'neo4j-remote': 'bolt://54.84.177.94:34978',
+    'neo4j-local': 'bolt://18.206.206.135:32809',
+    'neo4j-remote': 'bolt://18.206.206.135:32809',
     'base_url': 'http://localhost:3000',
     'api_path': '/api/v0'
   });
