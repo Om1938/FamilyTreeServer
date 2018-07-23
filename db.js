@@ -1,5 +1,6 @@
 var neo4j = require('neo4j-driver').v1;
 var bcrypt = require('bcrypt-nodejs');
+var $ = require('jquery');
 
 var jwt = require('jsonwebtoken');
 var secret = "IlOvEmYiNdIa";
@@ -44,18 +45,34 @@ module.exports = {
             var token = jwt.sign({ username: uname }, secret, { expiresIn: '12h' });
             res.json({ success: true, message: 'User Authenticated', token: token });
           } else
-            res.json({error : { success: false, message: 'Invalid Username/Password' }});
+            res.json({ error: { success: false, message: 'Invalid Username/Password' } });
         } else {
-          res.json({error : { success: false, message: 'Invalid Username/Password' }});
+          res.json({ error: { success: false, message: 'Invalid Username/Password' } });
         }
       });
   },
-  getdata:function(req,res){
+  getdata: function (req, res) {
     session
-      .run('MATCH (n) RETURN n LIMIT 25')
+      .run('MATCH (tom:Person {name:"Tom Hanks"})-[a:ACTED_IN]->(m) RETURN m,tom,a')
       .then(function (result) {
-        console.log(result);
-        res.send(result);       
-      });  
+        var keysarr = [];
+        result.records[0]["keys"].forEach(function (record) {
+          keysarr.push(record);
+        })
+        console.log(keysarr);
+        result.records.forEach(function (record) {
+          keysarr.forEach(function (key) {
+            console.log(record.get(key));
+          });
+          console.log("Record Change");
+        })
+        // r  esult.records.forEach(function(record) {
+        //     console.log(record.get('m'));
+        //     console.log(record.get('a')); 
+        //     console.log(record.get('tom'));
+        //     console.log("Record Change");
+        // })
+        res.send(result);
+      })
   }
 }
