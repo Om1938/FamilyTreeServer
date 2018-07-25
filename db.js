@@ -23,13 +23,15 @@ module.exports = {
     bcrypt.hash(tmppass, null, null, function (err, hash) {
       if (err) throw err;
       session
-        .run('CREATE (n:user{username:"' + uname + '", password:"' + hash + '"}) RETURN n.username')
+        .run('CREATE (n:user{username:"' + uname + '", password:"' + hash + '"}) RETURN n')
         .then(function (result) {
           result.records.forEach(function (record) {
             console.log(record);
+            res.send({ message: "Success", res: record });
           })
         }).catch();
     });
+
   },
   login: function (req, res) {
     var uname = req.body.username;
@@ -53,7 +55,7 @@ module.exports = {
   },
   getdata: function (req, res) {
     session
-      .run('MATCH (tom:Person {name:"Tom Hanks"})-[a:ACTED_IN]->(m) RETURN m,tom,a')
+      .run('MATCH (n:user)-[r]->(m:user) RETURN n,r,m ')
       .then(function (result) {
         var keysarr = [];
         var relarr = [];
@@ -66,7 +68,7 @@ module.exports = {
           keysarr.forEach(function (key) {
             var rec = record.get(key);
             var recs = {};
-            if(ids.includes(rec.identity.low)){
+            if (ids.includes(rec.identity.low)) {
               return;
             }
             ids.push(rec.identity.low);
@@ -84,5 +86,42 @@ module.exports = {
         })
         res.send({ nodes: nodearr, relations: relarr });
       })
+  },
+  delNode: function (req, res) {
+    var uname = req.body.username;
+    session
+      .run('MATCH (n:user{username:"' + uname + '"}) DETACH DELETE n')
+      .then(function (result) {
+        if (result.summary.counters._stats.nodesDeleted) {
+          res.send({ success: true, message: uname + " Successfully Deleted" });
+        } else {
+          res.send({ success: false, message: uname + " Not Found" });
+        }
+      }).catch();
+  },
+  updateNode: function (req, res) {
+    console.log("Khus to bhot honge aap aaj!!");
+  },
+  addRelation: function (req, res) {
+    var parent = req.body.parent;
+    var type = req.body.type;
+    var child = req.body.child;
+    session
+      .run('MATCH (parent:user{username:"' + parent + '"}) MATCH (child:user{username:"' + child + '"}) MATCH (parent)-[data:' + type + ']->(child) RETURN data')
+      .then(function (result) {
+        if (!result.records[0]) {
+          session
+            .run('MATCH (parent:user{username:"' + parent + '"}) MATCH (child:user{username:"' + child + '"}) CREATE (parent)-[:' + type + '{}]->(child)')
+            .then(function (result) {
+              if (result.summary.counters._stats.relationshipsCreated) {
+                res.send({ success: true, message: " Successfully Added" });
+              } else {
+                res.send({ success: false, message: parent + " or " + child + " Not Found" });
+              }
+            }).catch();
+        } else {
+          res.send({ success: false, message: " Relationship already exists! " })
+        }
+      }).catch();
   }
 }
