@@ -27,7 +27,7 @@ app.set('port', nconf.get('PORT'));
 app.get('/',db.demofun);
 app.post('/register',db.register);
 app.post('/login',db.login);
-app.post('/getdata',db.getdata);
+app.get('/getdata',db.getdata);
 
 
 app.listen(app.get('port'),'0.0.0.0', function () {

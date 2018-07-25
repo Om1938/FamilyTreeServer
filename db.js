@@ -5,7 +5,7 @@ var $ = require('jquery');
 var jwt = require('jsonwebtoken');
 var secret = "IlOvEmYiNdIa";
 var window = require("js-base64").Base64;
-var driver = neo4j.driver('bolt://18.206.206.135:32809', neo4j.auth.basic('neo4j', 'masters-percents-decrease'));
+var driver = neo4j.driver('bolt://52.91.160.148:33320', neo4j.auth.basic('neo4j', 'mathematics-launcher-intercom'));
 var session = driver.session();
 
 module.exports = {
@@ -56,23 +56,33 @@ module.exports = {
       .run('MATCH (tom:Person {name:"Tom Hanks"})-[a:ACTED_IN]->(m) RETURN m,tom,a')
       .then(function (result) {
         var keysarr = [];
+        var relarr = [];
+        var nodearr = [];
         result.records[0]["keys"].forEach(function (record) {
           keysarr.push(record);
         })
-        console.log(keysarr);
+        var ids = [];
         result.records.forEach(function (record) {
           keysarr.forEach(function (key) {
-            console.log(record.get(key));
+            var rec = record.get(key);
+            var recs = {};
+            if(ids.includes(rec.identity.low)){
+              return;
+            }
+            ids.push(rec.identity.low);
+            recs.id = rec.identity.low;
+            recs.properties = rec.properties;
+            if (rec.labels) {
+              recs.labels = rec.labels;
+              nodearr.push(recs);
+            } else {
+              recs.start = rec.start.low;
+              recs.end = rec.end.low;
+              relarr.push(recs);
+            }
           });
-          console.log("Record Change");
         })
-        // r  esult.records.forEach(function(record) {
-        //     console.log(record.get('m'));
-        //     console.log(record.get('a')); 
-        //     console.log(record.get('tom'));
-        //     console.log("Record Change");
-        // })
-        res.send(result);
+        res.send({ nodes: nodearr, relations: relarr });
       })
   }
 }
