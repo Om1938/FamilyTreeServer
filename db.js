@@ -5,7 +5,7 @@ var $ = require('jquery');
 var jwt = require('jsonwebtoken');
 var secret = "IlOvEmYiNdIa";
 var window = require("js-base64").Base64;
-var driver = neo4j.driver('bolt://107.23.132.215:32974', neo4j.auth.basic('neo4j', 'damping-ear-shadow'));
+var driver = neo4j.driver('bolt://107.23.132.215:33004', neo4j.auth.basic('neo4j', 'airships-instance-currency'));
 var session = driver.session();
 
 module.exports = {
@@ -61,6 +61,7 @@ module.exports = {
         var keysarr = [];
         var relarr = [];
         var nodearr = [];
+        //res.send(result);
         result.records[0]["keys"].forEach(function (record) {
           keysarr.push(record);
         })
@@ -75,7 +76,7 @@ module.exports = {
             ids.push(rec.identity.low);
             recs.id = rec.identity.low;
             recs.properties = rec.properties;
-            if (rec.labels) {
+            if (!rec.start) {
               recs.labels = rec.labels;
               nodearr.push(recs);
             } else {
