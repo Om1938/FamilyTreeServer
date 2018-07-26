@@ -16,6 +16,7 @@ module.exports = {
 
   },
   register: function (req, res) {
+    console.log(req.body);
     var uname = req.body.username;
     var tmppass = req.body.password;
     console.log(tmppass);
