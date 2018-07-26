@@ -5,7 +5,7 @@ var $ = require('jquery');
 var jwt = require('jsonwebtoken');
 var secret = "IlOvEmYiNdIa";
 var window = require("js-base64").Base64;
-var driver = neo4j.driver('bolt://52.91.160.148:33320', neo4j.auth.basic('neo4j', 'mathematics-launcher-intercom'));
+var driver = neo4j.driver('bolt://107.23.132.215:32974', neo4j.auth.basic('neo4j', 'damping-ear-shadow'));
 var session = driver.session();
 
 module.exports = {
