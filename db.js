@@ -19,7 +19,7 @@ module.exports = {
     console.log(req.body);
     var uname = req.body.username;
     var tmppass = req.body.password;
-    console.log(tmppass);
+    //console.log(tmppass);
     var pass = "";
     bcrypt.hash(tmppass, null, null, function (err, hash) {
       if (err) throw err;
@@ -56,8 +56,9 @@ module.exports = {
   },
   getdata: function (req, res) {
     session
-      .run('MATCH (n:user)-[r]->(m:user) RETURN n,r,m ')
+      .run('MATCH (x) MATCH (n:user)-[r]->(m:user) RETURN n,r,m,x ')
       .then(function (result) {
+        //console.log(result);
         var keysarr = [];
         var relarr = [];
         var nodearr = [];
@@ -90,7 +91,7 @@ module.exports = {
       })
   },
   delNode: function (req, res) {
-    var uname = req.body.username;
+    var uname = req.body.user;
     session
       .run('MATCH (n:user{username:"' + uname + '"}) DETACH DELETE n')
       .then(function (result) {
@@ -105,9 +106,10 @@ module.exports = {
     console.log("Khus to bhot honge aap aaj!!");
   },
   addRelation: function (req, res) {
-    var parent = req.body.parent;
-    var type = req.body.type;
-    var child = req.body.child;
+    console.log(req.body);
+    var parent = req.body.user1;
+    var type = req.body.realtion;
+    var child = req.body.user2;
     session
       .run('MATCH (parent:user{username:"' + parent + '"}) MATCH (child:user{username:"' + child + '"}) MATCH (parent)-[data:' + type + ']->(child) RETURN data')
       .then(function (result) {

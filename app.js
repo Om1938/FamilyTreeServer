@@ -28,7 +28,7 @@ app.get('/',db.demofun);
 app.post('/register',db.register);
 app.post('/login',db.login);
 app.get('/getdata',db.getdata);
-app.delete('/delNode',db.delNode);
+app.post('/delNode',db.delNode);
 app.post('/updateNode',db.updateNode);
 app.post('/addRelation',db.addRelation);
 
