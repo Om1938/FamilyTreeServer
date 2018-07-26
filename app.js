@@ -30,7 +30,7 @@ app.post('/login',db.login);
 app.get('/getdata',db.getdata);
 app.delete('/delNode',db.delNode);
 app.post('/updateNode',db.updateNode);
-app.post('/addRelation',db.addRelation)
+app.post('/addRelation',db.addRelation);
 
 app.listen(app.get('port'),'0.0.0.0', function () {
     console.log('Server listening on http://'+ip.address()+":"+app.get('port'));
