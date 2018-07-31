@@ -28,9 +28,11 @@ module.exports = {
         .then(function (result) {
           result.records.forEach(function (record) {
             console.log(record);
-            res.send({ message: "Success", res: record });
+            res.send({ success:true ,message: uname +" Inserted Successfully"});
           })
-        }).catch();
+        }).catch(function (error){
+          res.send({success:false ,message:uname + " already exist in db",});
+        });
     });
 
   },
@@ -126,6 +128,8 @@ module.exports = {
         } else {
           res.send({ success: false, message: " Relationship already exists! " })
         }
-      }).catch();
+      }).catch(function (error){
+        console.log("GG " + error);
+      });
   }
 }
